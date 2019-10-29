@@ -1,13 +1,14 @@
-import express from 'express';
-import bodyParser from 'body-parser';
 import App from './app';
 import EventsController from './events/event.controller';
+import 'dotenv/config';
+import validateEnv from './utils/validateEnv';
+
+validateEnv();
 
 const app = new App(
   [
     new EventsController(),
   ],
-  5000,
 );
 
 app.listen();

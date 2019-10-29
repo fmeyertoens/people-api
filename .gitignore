@@ -3,3 +3,4 @@ dist
 
 #config
 nodemon.json
+.env
