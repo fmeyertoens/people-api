@@ -1,9 +1,12 @@
 import express, { Request, Response } from 'express';
 import Event from './event.interface';
+import Controller from '../interfaces/controller.interface';
+import eventModel from './event.model';
 
 class EventsController {
   public path = '/events';
   public router = express.Router();
+  private event = eventModel;
 
   private events: Event[] = [
     {
@@ -23,7 +26,10 @@ class EventsController {
   }
 
   getAllEvents = (req: Request, res: Response) => {
-    res.send(this.events);
+    this.event.find()
+      .then(events => {
+        res.send(events);
+      });
   }
 }
 
