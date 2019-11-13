@@ -2,7 +2,7 @@ interface Event {
   title: string;
   description: string;
   price: number;
-  date: string;
+  date: Date;
 }
 
 export default Event;
