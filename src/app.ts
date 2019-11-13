@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import mongoose from 'mongoose';
 import Controller from 'interfaces/controller.interface';
 
@@ -16,6 +17,7 @@ class App {
 
   private intializeMiddlewares() {
     this.app.use(bodyParser.json());
+    this.app.use(cors());
   }
 
   private initializeControllers(controllers: Controller[]) {
@@ -37,7 +39,10 @@ class App {
       MONGO_PATH,
     } = process.env;
     
-    mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`, {useNewUrlParser: true});
+    mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
   }
 }
 
