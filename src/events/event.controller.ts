@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import Event from './event.interface';
 import Controller from '../interfaces/controller.interface';
 import eventModel from './event.model';
+const mockData = require('./event-mock-100.json');
 
 class EventsController implements Controller {
   public path = '/events';
@@ -14,6 +15,7 @@ class EventsController implements Controller {
 
   public initializeRoutes() {
     this.router.get(this.path, this.getAllEvents);
+    this.router.get(`${this.path}Local`, this.getAllEventsLocal);
     this.router.patch(`${this.path}/:id`, this.modifyEvent);
   }
 
@@ -23,6 +25,10 @@ class EventsController implements Controller {
         res.send(events);
       });
   };
+
+  private getAllEventsLocal = (req: Request, res: Response) => {
+    res.send(mockData);
+  }
 
   private modifyEvent = (req: Request, res: Response) => {
     const id = req.params.id;
