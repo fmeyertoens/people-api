@@ -16,6 +16,7 @@ ENV NODE_ENV=production
 COPY package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 COPY --from=build /app/dist ./dist
+COPY --from=build /app/src/events/event-mock-100.json ./dist/events/event-mock-100.json
 
 USER node
 EXPOSE 5000
