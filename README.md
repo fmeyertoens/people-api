@@ -10,14 +10,14 @@ The sibling [`../graphql-server`](../graphql-server) project exposes similar eve
 
 ### Local integration
 
-To use the comparison client's built-in local settings, set `PORT=5000` and `MONGO_URI`, start this API, start the GraphQL server separately on port 8000, and run the frontend. If another port is used, update the REST URI through the frontend Settings dialog. The parent `rest-graphql-comparison` repository provides a Docker Compose stack with a local MongoDB container.
+To use the comparison client's built-in local settings, set `PORT=5000` and `MONGO_URI`, start this API, start the GraphQL server separately on port 8000, and run the frontend. If another port is used, update the REST URI through the frontend Settings dialog. The parent `rest-graphql-comparison` repository provides a Docker Compose stack with a local MongoDB container and mounts the shared fixture at runtime for `GET /eventsLocal`.
 
 ## What This Project Is About
 
 This project is an early-stage API scaffold centered around **events** and **users**.
 
 - The API currently exposes event-related endpoints.
-- Event data can be read from MongoDB or from a local JSON mock file.
+- Event data can be read from MongoDB or, in the Compose stack, from its shared JSON mock fixture.
 - User data is modeled in MongoDB but user routes/controllers are not implemented yet.
 
 In short: this is the backend foundation for an event/people app where users can create and manage events.
@@ -39,7 +39,6 @@ In short: this is the backend foundation for an event/people app where users can
 - `src/events/event.controller.ts`: Event endpoints.
 - `src/events/event.model.ts`: Mongoose Event schema/model.
 - `src/events/event.interface.ts`: Event TypeScript interface.
-- `src/events/event-mock-100.json`: Local mock events used by one endpoint.
 - `src/users/user.model.ts`: Mongoose User schema/model.
 - `src/users/user.interface.ts`: User TypeScript interface.
 - `src/utils/validateEnv.ts`: Runtime env var validation.
@@ -62,7 +61,7 @@ Returns all events from MongoDB.
 
 ### `GET /eventsLocal`
 
-Returns a static list of mock events from `event-mock-100.json`.
+Returns the static mock list from the canonical `mongo/seed/event-mock-100.json` fixture, which Docker Compose mounts read-only into this container. This endpoint is unavailable when the API runs standalone unless that fixture is supplied at the expected runtime path.
 
 ### `PATCH /events/:id`
 
