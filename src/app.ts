@@ -10,7 +10,6 @@ class App {
   constructor(controllers: Controller[]) {
     this.app = express();
 
-    this.connectToDatabase();
     this.intializeMiddlewares();
     this.initializeControllers(controllers);
   }
@@ -18,6 +17,9 @@ class App {
   private intializeMiddlewares() {
     this.app.use(bodyParser.json());
     this.app.use(cors());
+    this.app.get('/health', (_req, res) => {
+      res.status(200).json({ status: 'ok' });
+    });
   }
 
   private initializeControllers(controllers: Controller[]) {
@@ -32,17 +34,14 @@ class App {
     });
   }
 
-  private connectToDatabase() {
-    const {
-      MONGO_USER,
-      MONGO_PASSWORD,
-      MONGO_PATH,
-    } = process.env;
-    
-    mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+  public async connectToDatabase() {
+    const { MONGO_URI } = process.env;
+
+    if (!MONGO_URI) {
+      throw new Error('MONGO_URI must be set');
+    }
+
+    await mongoose.connect(MONGO_URI);
   }
 }
 

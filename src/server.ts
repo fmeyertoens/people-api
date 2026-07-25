@@ -5,10 +5,18 @@ import validateEnv from './utils/validateEnv';
 
 validateEnv();
 
-const app = new App(
-  [
-    new EventsController(),
-  ],
-);
+async function start() {
+  const app = new App(
+    [
+      new EventsController(),
+    ],
+  );
 
-app.listen();
+  await app.connectToDatabase();
+  app.listen();
+}
+
+start().catch(error => {
+  console.error('Unable to start REST server', error);
+  process.exitCode = 1;
+});
